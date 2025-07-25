@@ -1,0 +1,24 @@
+﻿{
+  "name": "work.ctrl3d.transport-server",
+  "version": "0.1.0",
+  "displayName": "TransportServer",
+  "description": "",
+  "unity": "2022.3",
+  "documentationUrl": "https://ctrl3d.github.io/TransportServer",
+  "changelogUrl": "https://github.com/ctrl3d/TransportServer/blob/main/CHANGELOG.md",
+  "licensesUrl": "https://github.com/ctrl3d/TransportServer/blob/main/LICENSE",
+  "dependencies": {
+    "com.unity.collections": "2.5.1",
+    "com.unity.transport": "2.5.2"
+  },
+  "keywords": [
+    "unity",
+    "transport",
+    "server"
+  ],
+  "author": {
+    "name": "Seungmin Lee",
+    "email": "ctrl3d@gmail.com",
+    "url": "https://ctrl3d.work"
+  }
+}
