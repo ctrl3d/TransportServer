@@ -14,23 +14,23 @@ namespace work.ctrl3d
         private NetworkDriver _driver;
         private NativeList<NetworkConnection> _connections;
 
-        public event Action<NetworkConnection> OnConnected;
-        public event Action<NetworkConnection> OnDisconnected;
-        public event Action<byte[], NetworkConnection> OnDataReceived;
+        protected event Action<NetworkConnection> OnConnected;
+        protected event Action<NetworkConnection> OnDisconnected;
+        protected event Action<byte[], NetworkConnection> OnDataReceived;
 
-        public string Address
+        protected string Address
         {
             get => address;
             set => address = value;
         }
 
-        public ushort Port
+        protected ushort Port
         {
             get => port;
             set => port = value;
         }
 
-        public virtual void Listen()
+        protected virtual void Listen()
         {
             if (_driver.IsCreated)
             {
@@ -51,7 +51,7 @@ namespace work.ctrl3d
             _driver.Listen();
         }
 
-        public virtual void Close()
+        protected virtual void Close()
         {
             if (!_driver.IsCreated) return;
 
