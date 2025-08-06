@@ -51,7 +51,7 @@ namespace work.ctrl3d
             _driver.Listen();
         }
 
-        protected virtual void Close()
+        public virtual void Close()
         {
             if (!_driver.IsCreated) return;
 
