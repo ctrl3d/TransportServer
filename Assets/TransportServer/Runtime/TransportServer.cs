@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace work.ctrl3d
 {
-    public class TransportServer : MonoBehaviour
+    public sealed class TransportServer : MonoBehaviour
     {
         [SerializeField] private NetworkFamily networkFamily = NetworkFamily.Ipv4;
         [SerializeField] private string address = "0.0.0.0";
