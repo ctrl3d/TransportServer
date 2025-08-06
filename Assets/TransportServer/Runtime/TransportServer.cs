@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace work.ctrl3d
 {
-    public sealed class TransportServer : MonoBehaviour
+    public class TransportServer : MonoBehaviour
     {
         [SerializeField] private NetworkFamily networkFamily = NetworkFamily.Ipv4;
         [SerializeField] private string address = "0.0.0.0";
@@ -30,7 +30,7 @@ namespace work.ctrl3d
             set => port = value;
         }
 
-        public void Listen()
+        public virtual void Listen()
         {
             if (_driver.IsCreated)
             {
@@ -51,7 +51,7 @@ namespace work.ctrl3d
             _driver.Listen();
         }
 
-        public void Close()
+        public virtual void Close()
         {
             if (!_driver.IsCreated) return;
 
