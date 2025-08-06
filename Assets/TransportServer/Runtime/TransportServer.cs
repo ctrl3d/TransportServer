@@ -10,6 +10,7 @@ namespace work.ctrl3d
         [SerializeField] private NetworkFamily networkFamily = NetworkFamily.Ipv4;
         [SerializeField] private string address = "0.0.0.0";
         [SerializeField] private ushort port = 7777;
+        [SerializeField] private int initialCapacity = 16; 
 
         private NetworkDriver _driver;
         private NativeList<NetworkConnection> _connections;
@@ -30,6 +31,14 @@ namespace work.ctrl3d
             set => port = value;
         }
 
+        protected int InitialCapacity
+        {
+            get => initialCapacity;
+            set => initialCapacity = value;
+        }
+        
+        protected NativeList<NetworkConnection> Connections => _connections;
+
         protected virtual void Listen()
         {
             if (_driver.IsCreated)
@@ -39,7 +48,7 @@ namespace work.ctrl3d
             }
 
             _driver = NetworkDriver.Create();
-            _connections = new NativeList<NetworkConnection>(16, Allocator.Persistent);
+            _connections = new NativeList<NetworkConnection>(initialCapacity, Allocator.Persistent);
 
             var endpoint = NetworkEndpoint.Parse(address, port, networkFamily);
             if (_driver.Bind(endpoint) != 0)
