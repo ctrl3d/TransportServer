@@ -10,14 +10,26 @@ namespace work.ctrl3d
         [SerializeField] private NetworkFamily networkFamily = NetworkFamily.Ipv4;
         [SerializeField] private string address = "0.0.0.0";
         [SerializeField] private ushort port = 7777;
-    
+
         private NetworkDriver _driver;
         private NativeList<NetworkConnection> _connections;
 
         public event Action<NetworkConnection> OnConnected;
         public event Action<NetworkConnection> OnDisconnected;
         public event Action<byte[], NetworkConnection> OnDataReceived;
-    
+
+        public string Address
+        {
+            get => address;
+            set => address = value;
+        }
+
+        public ushort Port
+        {
+            get => port;
+            set => port = value;
+        }
+
         public void Listen()
         {
             if (_driver.IsCreated)
@@ -25,32 +37,32 @@ namespace work.ctrl3d
                 Debug.LogWarning($"Server is already running...");
                 return;
             }
-            
+
             _driver = NetworkDriver.Create();
             _connections = new NativeList<NetworkConnection>(16, Allocator.Persistent);
-        
+
             var endpoint = NetworkEndpoint.Parse(address, port, networkFamily);
             if (_driver.Bind(endpoint) != 0)
             {
                 Debug.LogError($"Failed to bind to port {port}");
                 return;
             }
-        
+
             _driver.Listen();
         }
 
         public void Close()
         {
             if (!_driver.IsCreated) return;
-        
+
             _driver.Dispose();
             _connections.Dispose();
         }
-    
+
         private void Update()
         {
             if (!_driver.IsCreated) return;
-        
+
             _driver.ScheduleUpdate().Complete();
 
             CleanUpConnections();
@@ -59,14 +71,15 @@ namespace work.ctrl3d
             for (var i = 0; i < _connections.Length; i++)
             {
                 NetworkEvent.Type cmd;
-                while ((cmd = _driver.PopEventForConnection(_connections[i], out var stream)) != NetworkEvent.Type.Empty)
+                while ((cmd = _driver.PopEventForConnection(_connections[i], out var stream)) !=
+                       NetworkEvent.Type.Empty)
                 {
                     switch (cmd)
                     {
                         case NetworkEvent.Type.Data:
                         {
                             var length = stream.Length;
-                        
+
                             var bytes = new NativeArray<byte>(length, Allocator.Temp);
                             stream.ReadBytes(bytes);
                             OnDataReceived?.Invoke(bytes.ToArray(), _connections[i]);
@@ -92,9 +105,9 @@ namespace work.ctrl3d
             {
                 _connections.Add(connection);
                 var remoteEndpoint = _driver.GetRemoteEndpoint(connection);
-            
+
                 Debug.Log("Accepted a connection. :" + remoteEndpoint);
-            
+
                 OnConnected?.Invoke(connection);
             }
         }
@@ -110,7 +123,7 @@ namespace work.ctrl3d
                 }
             }
         }
-    
+
         public void SendBytes(NetworkConnection connection, byte[] data)
         {
             _driver.BeginSend(connection, out var writer);
