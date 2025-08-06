@@ -17,7 +17,7 @@ namespace work.ctrl3d
 
         protected event Action<NetworkConnection> OnConnected;
         protected event Action<NetworkConnection> OnDisconnected;
-        protected event Action<byte[], NetworkConnection> OnDataReceived;
+        protected event Action<byte[], NetworkConnection> OnReceived;
 
         protected string Address
         {
@@ -91,7 +91,7 @@ namespace work.ctrl3d
 
                             var bytes = new NativeArray<byte>(length, Allocator.Temp);
                             stream.ReadBytes(bytes);
-                            OnDataReceived?.Invoke(bytes.ToArray(), _connections[i]);
+                            OnReceived?.Invoke(bytes.ToArray(), _connections[i]);
                             bytes.Dispose();
                             break;
                         }
